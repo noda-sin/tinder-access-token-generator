@@ -7,7 +7,13 @@ const LOGIN_ID = '#loginbutton';
 const CONFIRM_SELECTOR = 'button[name="__CONFIRM__"]';
 
 async function generateAccessToken({ emailAddress, password }) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch(process.env.NO_SANDBOX ? {
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+    ],
+    executablePath: process.env.CHROMIUM_PATH || null
+  } : {});
   const page = await browser.newPage();
 
   await page.goto(TINDER_OAUTH_URL);
